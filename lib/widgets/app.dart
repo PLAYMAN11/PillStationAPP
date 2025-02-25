@@ -15,9 +15,10 @@ class _MyappState extends State<Myapp> {
    return MaterialApp(
      debugShowCheckedModeBanner: false,
     title: "Memorama",
-  //  theme: ThemeData(fontFamily: "outfit", primarySwatch:Colors.lightBlue),
+   // theme: ThemeData(fontFamily: "outfit", primarySwatch:Colors.lightBlue),
+    theme: ThemeData.dark(),
     initialRoute: "home",
-    routes: {"home":(BuildContext)=> const Home()},
+    routes: {"home":(BuildContext)=> Home()},
    );
   }
 }
