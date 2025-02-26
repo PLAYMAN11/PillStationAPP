@@ -14,16 +14,23 @@ class _HomeState extends State<Home> {
       appBar: AppBar(),
       body: Center(
         child: Column(
-          
           //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Column(mainAxisAlignment: MainAxisAlignment.spaceBetween),
             Text(
               "PillStation",
-              style: TextStyle(color: Colors.blueAccent, fontSize: 60),
+              style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 60,
+                  fontFamily: 'League',
+                  fontWeight: FontWeight.w400),
             ),
             ElevatedButton(
-                onPressed: () => {}, child: Text("Conectar a un pastillero"))
+                onPressed: () => {
+                  setState(() {
+                    
+                  }),
+                }, child: Text("Conectar a un pastillero"))
           ],
         ),
       ),
