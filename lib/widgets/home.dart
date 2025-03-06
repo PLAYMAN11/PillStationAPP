@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pillstationmovil/widgets/connectPillbox.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,15 +22,15 @@ class _HomeState extends State<Home> {
               "PillStation",
               style: TextStyle(
                   color: Colors.blueAccent,
+                  
                   fontSize: 60,
                   fontFamily: 'League',
-                  fontWeight: FontWeight.w400),
+                  fontWeight: FontWeight.w900),
+                  
             ),
             ElevatedButton(
                 onPressed: () => {
-                  setState(() {
-                    
-                  }),
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Connectpillbox()))
                 }, child: Text("Conectar a un pastillero"))
           ],
         ),
