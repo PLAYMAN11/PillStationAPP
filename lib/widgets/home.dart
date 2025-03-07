@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pillstationmovil/config/mongodb.dart';
 import 'package:pillstationmovil/widgets/connectPillbox.dart';
+import 'package:pillstationmovil/widgets/query.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -31,7 +33,11 @@ class _HomeState extends State<Home> {
             ElevatedButton(
                 onPressed: () => {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> Connectpillbox()))
-                }, child: Text("Conectar a un pastillero"))
+                }, child: Text("Conectar a un pastillero")),
+            ElevatedButton(
+                onPressed: () => {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Query()))
+                }, child: Text("Consultar"))
           ],
         ),
       ),
