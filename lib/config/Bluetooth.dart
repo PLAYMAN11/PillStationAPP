@@ -1,22 +1,20 @@
 
 import 'dart:async';
 
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:bluetooth_classic/bluetooth_classic.dart';
+import 'package:bluetooth_classic/models/device.dart';
 
 Bluetooth bluetooth = Bluetooth();
 class Bluetooth{
-  late StreamSubscription <List<ScanResult>> subscription;
-  
-  void TurnOn(){
-    FlutterBluePlus.onScanResults.listen((results) {
-      for (ScanResult r in results){
-        if (r.device.advName == "PillStation") {
-          r.device.connect();
-        }
-      }
-    },
-      onError: (e) => print(e),
-    );
+  final bluetoothConexion = BluetoothClassic();
+  Future<void> connect() async {
+    await bluetoothConexion.initPermissions();
+    List<Device> _discoveredDevices = await bluetoothConexion.getPairedDevices();
+    for(Device device in _discoveredDevices){
+      if (device.name == "PillStation") {
+        await bluetoothConexion.connect(device.address, "00001101-0000-1000-8000-00805F9B34FB");
+        bluetoothConexion.write("Conectado");
+      }  
+    }
   }
 }
-

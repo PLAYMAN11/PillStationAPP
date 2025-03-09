@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_blue_plus: ^1.35.3
   mongo_dart: ^0.10.4
+  bluetooth_classic: ^0.0.3
 
 dev_dependencies:
   flutter_test:
