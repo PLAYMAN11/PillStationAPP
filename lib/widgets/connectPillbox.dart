@@ -12,7 +12,7 @@ class _ConnectpillboxState extends State<Connectpillbox> {
   @override
   void initState() {
     super.initState();
-    bluetooth.TurnOn();
+    bluetooth.connect();
   }
 
   @override
@@ -30,7 +30,8 @@ class _ConnectpillboxState extends State<Connectpillbox> {
               TextSpan(
                   text:
                       "Asegurese de haber habilitado el dispositivo como se muestra en el video de abajo",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w400))
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w400)),
+              
             ])),
           ),
         ]),
