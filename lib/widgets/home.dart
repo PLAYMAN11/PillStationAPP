@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pillstationmovil/config/mongodb.dart';
-import 'package:pillstationmovil/widgets/connectPillbox.dart';
+import 'package:pillstationmovil/widgets/pillbox/configure_pillbox.dart';
+import 'package:pillstationmovil/widgets/pillbox/connectPillbox.dart';
 import 'package:pillstationmovil/widgets/query.dart';
 
 class Home extends StatefulWidget {
@@ -24,20 +25,27 @@ class _HomeState extends State<Home> {
               "PillStation",
               style: TextStyle(
                   color: Colors.blueAccent,
-                  
                   fontSize: 60,
                   fontFamily: 'League',
                   fontWeight: FontWeight.w900),
-                  
             ),
             ElevatedButton(
                 onPressed: () => {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Connectpillbox()))
-                }, child: Text("Conectar a un pastillero")),
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ConfigurePillbox()))
+                    },
+                child: Text(
+                  "Configurar un pastillero",
+                  style: TextStyle(fontSize: 20),
+                )),
             ElevatedButton(
                 onPressed: () => {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Query()))
-                }, child: Text("Consultar")),
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Query()))
+                    },
+                child: Text("Consultar")),
           ],
         ),
       ),
