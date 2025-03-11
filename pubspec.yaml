@@ -38,6 +38,8 @@ dependencies:
   bluetooth_classic: ^0.0.3
   #10Marzo2025 Emmanuel.
   dropdown_search: ^6.0.2
+  #11Marzo2025 Emmanuel.
+  dropdown_button2: ^2.3.9
   
 dev_dependencies:
   flutter_test:
