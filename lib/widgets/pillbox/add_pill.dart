@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dropdown_search/dropdown_search.dart';
@@ -13,17 +14,16 @@ class AddPill extends StatefulWidget {
 }
 
 class _AddPillState extends State<AddPill> {
-  List<String> results =[];
 
   @override
   void initState() {
     // TODO: implement initState
+   
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    consult();
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -31,26 +31,28 @@ class _AddPillState extends State<AddPill> {
         toolbarHeight: 120,
         title: Text(
           "Agregar Pastilla",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, ),
         ),
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            DropdownSearch(
-              enabled: true,
-              compareFn: (item1, item2) {
-                return false;
-              },
-              items: (filter, infiniteScrollProps) => results!,
-              autoValidateMode: AutovalidateMode.always,
-              popupProps: PopupProps.menu(
-                showSearchBox: true,
-                title: Text("Buscar"),
-              ),
-            )
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          Text("Pastilla",),
+          DropdownSearch(
+            
+            enabled: true,
+            
+            compareFn: (item1, item2) {
+              return false;
+            },
+            items: (filter, infiniteScrollProps) => db.results.isEmpty ? [] : db.results,
+            autoValidateMode: AutovalidateMode.always,
+            popupProps: PopupProps.menu(
+              showSearchBox: true,
+              title: Text("Buscar"),
+            ),
+          ),
+
+        ],
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
@@ -92,12 +94,5 @@ class _AddPillState extends State<AddPill> {
       ),
     );
   }
-
-  Future<void> consult() async {
-    await db.connectDB();
-    db.setcollectionPills();
-    List<Map<String, dynamic>> tmp = await db.findpills();
-     results= tmp.map((item) => item["nombre_medicamento"] as String).toList();
-    setState(() {});
-  }
+  
 }

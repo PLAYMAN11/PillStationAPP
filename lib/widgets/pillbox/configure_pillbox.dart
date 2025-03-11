@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pillstationmovil/widgets/pillbox/add_pill.dart';
 import 'package:pillstationmovil/widgets/pillbox/connectPillbox.dart';
 
+import '../../config/mongodb.dart';
+
 class ConfigurePillbox extends StatefulWidget {
   const ConfigurePillbox({Key? key}) : super(key: key);
 
@@ -10,9 +12,16 @@ class ConfigurePillbox extends StatefulWidget {
 }
 
 class _ConfigurePillboxState extends State<ConfigurePillbox> {
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    startDB();
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return db.isloaded ? Scaffold(
       appBar: AppBar(),
       body: Center(),
       bottomNavigationBar: Container(
@@ -51,6 +60,18 @@ class _ConfigurePillboxState extends State<ConfigurePillbox> {
           ],
         ),
       ),
-    );
+    ) :
+    Center(child: CircularProgressIndicator(),);
+  }
+  Future<void> startDB() async {
+    await db.connectDB().whenComplete(() async {
+      db.setcollectionPills();
+      db.isloaded=true;
+      List<Map<String, dynamic>> tmp = await db.findpills();
+      db.results= tmp.map((item) => item["nombre_medicamento"] as String).toList();
+      setState(() {
+
+      });
+    },);
   }
 }

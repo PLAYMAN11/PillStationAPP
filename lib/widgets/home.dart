@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ConfigurePillbox()))
-                    },
+               },
                 child: Text(
                   "Configurar un pastillero",
                   style: TextStyle(fontSize: 20),
