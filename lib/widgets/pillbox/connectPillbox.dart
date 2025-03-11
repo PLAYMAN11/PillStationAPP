@@ -12,7 +12,7 @@ class _ConnectpillboxState extends State<Connectpillbox> {
   @override
   void initState() {
     super.initState();
-    bluetooth.connect();
+    bluetooth.sendData();
   }
 
   @override
