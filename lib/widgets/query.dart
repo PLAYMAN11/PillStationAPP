@@ -43,9 +43,9 @@ class _QueryState extends State<Query> {
     );
   }
   Future<void> consultar() async {
-    await mongodb.connectDB();
-    mongodb.setcollection();
-    results = await mongodb.findUser();
+    await db.connectDB();
+    db.setcollectionUser();
+    results = await db.findUser();
     setState(() {
       print("Results: $results");
     });
