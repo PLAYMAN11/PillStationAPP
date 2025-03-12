@@ -37,21 +37,30 @@ class _ConfigurePillboxState extends State<ConfigurePillbox> {
               ),
             ),
             body: ListView.builder(
-              itemCount: pillList.length,
+              itemCount: pillList.isEmpty ? 1 : pillList.length,
               itemBuilder: (context, index) {
                 if (pillList.isEmpty) {
-                  return Center(
-                      child: Text(
-                    "No hay datos",
-                    style: TextStyle(fontSize: 20),
-                  ));
+                  return ListTile(
+                    title: Center(
+                        child: Text(
+                      "No hay datos",
+                      style: TextStyle(fontSize: 20),
+                    )),
+                  );
                 } else {
                   return ListTile(
                     title: Text(
                       pillList.elementAt(index).name,
                     ),
-                    subtitle: Text(
-                        "Cada ${pillList.elementAt(index).hour} horas"),
+                    subtitle:
+                        Text("Cada ${pillList.elementAt(index).hour} horas"),
+                    leading: Icon(Icons.medication),
+                    trailing: IconButton(
+                        onPressed: () {
+                          pillList.removeAt(index);
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.backspace)),
                   );
                 }
               },
@@ -80,10 +89,28 @@ class _ConfigurePillboxState extends State<ConfigurePillbox> {
                     backgroundColor: Colors.blueGrey,
                     child: IconButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Connectpillbox()));
+                        if (pillList.isEmpty) {
+                          showDialog<void>(
+                            context: context,
+                            builder: (BuildContext dialogContext) {
+                              return AlertDialog(
+                                title: Text('No has agregado datos'),
+                                actions: <Widget>[
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Ok")),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Connectpillbox()));
+                        }
                       },
                       icon: Icon(Icons.check),
                       color: Colors.white,

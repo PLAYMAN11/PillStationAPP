@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pillstationmovil/config/Bluetooth.dart';
+import 'package:pillstationmovil/config/pill.dart';
 
 class Connectpillbox extends StatefulWidget {
   const Connectpillbox({super.key});
@@ -12,7 +14,27 @@ class _ConnectpillboxState extends State<Connectpillbox> {
   @override
   void initState() {
     super.initState();
-    bluetooth.sendData();
+    DateTime date = DateTime.now();
+    List<int> hours=[];
+    List<int> minutes=[];
+    int mayor = 0;
+    for(Pill r in pillList){
+      print("${8/r.hour}");
+      mayor = (mayor > 8/r.hour ? mayor : 8/r.hour).toInt();
+      for(int i=1; i<=mayor; i++) {
+        hours.add((date.hour) + r.hour * i);
+      }
+    }
+    for(int i=0; i<mayor; i++){
+      minutes.add(date.minute);
+    }
+    hours = hours.toSet().toList();
+    hours.sort();
+    
+    print("${mayor}");
+    String datos = "{hours:${hours.toString()}, minutes:${minutes.toString()}}";
+    print("${datos}");
+    bluetooth.sendData(datos);
   }
 
   @override
