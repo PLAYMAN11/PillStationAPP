@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:pillstationmovil/config/mongodb.dart';
+import 'package:pillstationmovil/config/pill.dart';
 import 'package:pillstationmovil/widgets/pillbox/configure_pillbox.dart';
 
 class AddPill extends StatefulWidget {
@@ -14,12 +16,15 @@ class AddPill extends StatefulWidget {
 }
 
 class _AddPillState extends State<AddPill> {
+  List<int> hours = [];
+  int? selectedFrequency;
+  String? selectedPill;
 
   @override
   void initState() {
     // TODO: implement initState
-   
     super.initState();
+    hours = [2,4,6,8];
   }
 
   @override
@@ -31,28 +36,64 @@ class _AddPillState extends State<AddPill> {
         toolbarHeight: 120,
         title: Text(
           "Agregar Pastilla",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, ),
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w900,
+          ),
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Text("Pastilla",),
-          DropdownSearch(
-            
-            enabled: true,
-            
-            compareFn: (item1, item2) {
-              return false;
-            },
-            items: (filter, infiniteScrollProps) => db.results.isEmpty ? [] : db.results,
-            autoValidateMode: AutovalidateMode.always,
-            popupProps: PopupProps.menu(
-              showSearchBox: true,
-              title: Text("Buscar"),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Pastilla",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
             ),
-          ),
-
-        ],
+            Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 10)),
+            DropdownSearch(
+              onChanged: (value) {
+                selectedPill = value;
+              },
+              compareFn: (item1, item2) {
+                return false;
+              },
+              items: (filter, infiniteScrollProps) =>
+                  db.results.isEmpty ? [] : db.results,
+              autoValidateMode: AutovalidateMode.always,
+              popupProps: PopupProps.menu(
+                showSearchBox: true,
+                title: Text("Buscar"),
+              ),
+            ),
+            Padding(padding: const EdgeInsets.fromLTRB(0, 40, 0, 0)),
+            Text(
+              "Frecuencia",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+            ),
+            Padding(padding: const EdgeInsets.fromLTRB(0, 0, 0, 0)),
+            Row(
+              children: [
+                DropdownButton2(
+                    value: selectedFrequency,
+                    onChanged: (int? value) {
+                      setState(() {
+                        selectedFrequency = value;
+                      });
+                    },
+                    items: hours
+                        .map((int item) => DropdownMenuItem<int>(
+                            value: item,
+                            child: Text(""+item.toString(),
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+                            )))
+                        .toList()),
+                Text("horas", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),)
+              ],
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
@@ -80,6 +121,7 @@ class _AddPillState extends State<AddPill> {
               backgroundColor: Colors.blueGrey,
               child: IconButton(
                 onPressed: () {
+                  pillList.add(Pill(selectedPill!, (selectedFrequency!),(0)));
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -94,5 +136,4 @@ class _AddPillState extends State<AddPill> {
       ),
     );
   }
-  
 }
