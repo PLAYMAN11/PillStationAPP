@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pillstationmovil/config/mongodb.dart';
 import 'package:pillstationmovil/widgets/pillbox/configure_pillbox.dart';
 import 'package:pillstationmovil/widgets/pillbox/connectPillbox.dart';
+import 'package:pillstationmovil/widgets/pillbox/prueba.dart';
 import 'package:pillstationmovil/widgets/query.dart';
 
 class Home extends StatefulWidget {
@@ -79,6 +80,30 @@ class _HomeState extends State<Home> {
                 ),
               ),
               const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Prueba())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 2,
+                ),
+                child: const Text(
+                  "Prueba dentro de 2 minutos",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
 
               const Spacer(),
               // Bottom Info Section
