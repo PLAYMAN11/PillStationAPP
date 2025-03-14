@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pillstationmovil/config/Bluetooth.dart';
 import 'package:pillstationmovil/config/pill.dart';
+import 'package:pillstationmovil/widgets/pillbox/organize_pills.dart';
 
 class Connectpillbox extends StatefulWidget {
   const Connectpillbox({super.key});
@@ -26,21 +27,21 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
     DateTime date = DateTime.now();
     List<int> hours=[];
     List<int> minutes=[];
-    int mayor = 0;
+     bluetooth.size= 0;
     for(Pill r in pillList){
       print("${8/r.hour}");
-      mayor = (mayor > 8/r.hour ? mayor : 8/r.hour).toInt();
-      for(int i=1; i<=mayor; i++) {
+      bluetooth.size = (bluetooth.size > 8/r.hour ? bluetooth.size : 8/r.hour).toInt();
+      for(int i=1; i<=bluetooth.size; i++) {
         hours.add((date.hour) + r.hour * i);
       }
     }
-    for(int i=0; i<mayor; i++){
+    for(int i=0; i<bluetooth.size; i++){
       minutes.add(date.minute);
     }
     hours = hours.toSet().toList();
     hours.sort();
     print(hours);
-    print("${mayor}");
+    print("${bluetooth.size}");
     datos = "{hour : ${hours.toString()}, minutes:${minutes.toString()}}";
     print("${datos}");
 
@@ -277,8 +278,7 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                             checkConnectionStatus();
                           });
                         } else {
-                          // Continue to next screen
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizePills()));
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -380,8 +380,9 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
         ),
         const SizedBox(width: 12),
         const Text(
-          "No se pudo conectar al dispositivo",
+          "No se pudo conectar",
           style: TextStyle(
+            
             fontSize: 16,
             color: Colors.white,
           ),

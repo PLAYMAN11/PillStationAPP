@@ -8,6 +8,7 @@ class Bluetooth {
   final _bluetoothConexion = BluetoothClassic();
   bool isScanning = false;
   bool isConnected = false;
+  int size=0;
   
 
   Future<bool> sendData(String data) async {

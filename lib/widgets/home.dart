@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pillstationmovil/config/mongodb.dart';
 import 'package:pillstationmovil/widgets/pillbox/configure_pillbox.dart';
-import 'package:pillstationmovil/widgets/pillbox/connectPillbox.dart';
 import 'package:pillstationmovil/widgets/pillbox/prueba.dart';
-import 'package:pillstationmovil/widgets/query.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
