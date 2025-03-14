@@ -25,23 +25,25 @@ class _PruebaState extends State<Prueba> with SingleTickerProviderStateMixin {
 
     DateTime date = DateTime.now();
     List<int> hours=[];
+    List<int> minutess=[date.minute+2, date.minute+4, date.minute+6, date.minute+8];
     List<int> minutes=[];
     int i=0;
     print(hours);
-    if (date.minute+2 >= 60) {
-      minutes.add(date.minute+2%60);
-      hours.add(date.hour+1);
-    } else{
-      minutes.add(date.minute+2);
-      hours.add(date.hour);
+    for(i; i<4; i++){
+      if (minutess[i] >= 60) {
+        minutes.add(minutess[i]%60);
+        hours.add(date.hour+1);
+      } else{
+        minutes.add(minutess[i]);
+        hours.add(date.hour);
+      }
     }
     datos = "{hour : $hours, minutes:$minutes}";
     print("${datos}");
-
-    // Start the connection process
+    
     SendData();
 
-    // Add a delayed check to update UI after connection
+   
     Future.delayed(const Duration(seconds: 3), () {
       checkConnectionStatus();
     });
