@@ -249,7 +249,7 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                           const SizedBox(height: 12),
                           _buildInstructionStep(
                             2,
-                            "Encienda su PillStation y espere a que el LED azul parpadee",
+                            "Asegurese que el dispositivo este conectado",
                             Icons.power_settings_new,
                           ),
                           const SizedBox(height: 12),
