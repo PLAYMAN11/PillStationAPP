@@ -26,29 +26,74 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
 
     DateTime date = DateTime.now();
     List<int> hours=[];
+    List<int> latehours=[];
     List<int> minutes=[];
-     bluetooth.size= 0;
-    for(Pill r in pillList){
-      print("${8/r.hour}");
-      bluetooth.size = (bluetooth.size > 8/r.hour ? bluetooth.size : 8/r.hour).toInt();
-      for(int i=1; i<=bluetooth.size; i++) {
-        hours.add((date.hour) + r.hour * i);
+    bluetooth.size= 0;
+    //HORAS 2 4 Y 6 BIEN
+    // 4 Y 6 BIEN
+    //6 y 8 BIEN
+    //2, 4, 6 y 8 BIEN
+    bool pillH2=false;
+    bool pillH4=false;
+    bool pillH6=false;
+    bool pillH8=false;
+    for (Pill pill in pillList){
+      if (pill.hour == 2) {
+        pillH2 = true;
+      }
+      if (pill.hour == 4) {
+        pillH4 = true;
+      }
+      if (pill.hour == 6) {
+        pillH6 = true;
+      }
+      if (pill.hour == 8) {
+        pillH8 = true;
+      }
+    }
+    if (pillH2) {
+      bluetooth.size=4;
+    } else if(pillH4 && pillH6){
+      bluetooth.size=3;
+    } else if((pillH8 || pillH6) && !(pillH8 && pillH6)){
+      bluetooth.size=1;
+    } else {
+      bluetooth.size=2;
+    }
+    // for(Pill r in pillList){
+    //   for(int i=1; i<=bluetooth.size; i++) {
+    //     if (date.hour + r.hour >=24) {
+    //       latehours.add(((date.hour) + r.hour)%24);
+    //     } else {
+    //       hours.add((date.hour) + r.hour);
+    //     }
+    //   }
+    // }
+    for(Pill pill in pillList) {
+      for (int i = 1; i <= (8/pill.hour); i++) {
+        if (date.hour + pill.hour*i >= 24) {
+          latehours.add(((date.hour) + pill.hour*i)%24);
+        } else {
+          hours.add((date.hour) + pill.hour*i);
+        }
       }
     }
     for(int i=0; i<bluetooth.size; i++){
       minutes.add(date.minute);
     }
-    hours = hours.toSet().toList();
+    hours=hours.toSet().toList();
     hours.sort();
+    latehours=latehours.toSet().toList();
+    latehours.sort();
+    hours.addAll(latehours);
+
     print(hours);
     print("${bluetooth.size}");
     datos = "{hour : ${hours.toString()}, minutes:${minutes.toString()}}";
     print("${datos}");
 
-    // Start the connection process
     SendData();
 
-    // Add a delayed check to update UI after connection
     Future.delayed(const Duration(seconds: 3), () {
       checkConnectionStatus();
     });
@@ -382,7 +427,7 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
         const Text(
           "No se pudo conectar",
           style: TextStyle(
-            
+
             fontSize: 16,
             color: Colors.white,
           ),
