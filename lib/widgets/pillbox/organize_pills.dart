@@ -54,6 +54,9 @@ class _OrganizePillsState extends State<OrganizePills> {
             case 1:
               compartmentMedications[0].add(pillList[i].name);
               break;
+            case 2:
+              compartmentMedications[0].add(pillList[i].name);
+              break;
             case 3:
               compartmentMedications[1].add(pillList[i].name);
               break;
