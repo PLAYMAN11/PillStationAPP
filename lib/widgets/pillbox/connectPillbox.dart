@@ -294,14 +294,17 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        side: BorderSide(color: Colors.blue.shade700),
+                        side: BorderSide(
+                          color: isConnected ? Colors.grey.shade400 : Colors.blue.shade700,
+                        ),
+                        backgroundColor: isConnected ? Colors.grey.shade200 : Colors.white,
                       ),
                       child: Text(
                         "Volver",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.blue.shade700,
+                          color: isConnected ? Colors.grey.shade600 : Colors.blue.shade700,
                         ),
                       ),
                     ),
