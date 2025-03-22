@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pillstationmovil/widgets/login.dart';
 
 import 'home.dart';
 
@@ -30,8 +31,8 @@ class _MyappState extends State<Myapp> {
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(backgroundColor: Colors.blue),
       ),
-      initialRoute: "home",
-      routes: {"home": (BuildContext) => Home()},
+      initialRoute: "login",
+      routes: {"login": (BuildContext) => Login()},
     );
   }
 }

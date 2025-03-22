@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pillstationmovil/config/Bluetooth.dart';
+import 'package:pillstationmovil/config/mongodb.dart';
+import 'package:pillstationmovil/config/user.dart';
+import 'package:pillstationmovil/widgets/login.dart';
 import 'package:pillstationmovil/widgets/pillbox/configure_pillbox.dart';
 import 'package:pillstationmovil/widgets/pillbox/prueba.dart';
 
@@ -42,7 +46,7 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 8),
               const Text(
-                "Gestiona tu medicación inteligentemente",
+                "Gestiona las pastillas de los pacientes",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey,
@@ -50,8 +54,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               const SizedBox(height: 80),
-
-              // Main Action Buttons
+              
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -95,6 +98,37 @@ class _HomeState extends State<Home> {
                 ),
                 child: const Text(
                   "Prueba dentro de 2 minutos",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                 if (bluetooth.isConnected) {
+                   bluetooth.closeConnection();
+                 }
+                 if (db.isloaded) {
+                   db.closeConnection();
+                 }
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login())
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 2,
+                ),
+                child: const Text(
+                  "Cerrar Sesión",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pillstationmovil/config/mongodb.dart';
 import 'package:pillstationmovil/config/pill.dart';
+import 'package:pillstationmovil/widgets/home.dart';
 import '../../config/Bluetooth.dart';
 
 class OrganizePills extends StatefulWidget {
@@ -11,19 +13,16 @@ class OrganizePills extends StatefulWidget {
 }
 
 class _OrganizePillsState extends State<OrganizePills> {
-  // List to store medications for each compartment
   List<List<String>> compartmentMedications = [];
 
   @override
   void initState() {
     super.initState();
-
-    // Initialize the compartment medications list
+    
     for (int i = 0; i < bluetooth.size; i++) {
       compartmentMedications.add([]);
     }
-
-    // Organize pills into compartments based on dosage frequency
+    
     for (int i = 0; i < pillList.length; i++) {
       switch (pillList[i].hour) {
         case 2:
@@ -319,8 +318,8 @@ class _OrganizePillsState extends State<OrganizePills> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              // Exit the application
-              SystemNavigator.pop();
+              Close();
+             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home(),));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red.shade700,
@@ -342,5 +341,9 @@ class _OrganizePillsState extends State<OrganizePills> {
         ),
       ),
     );
+  }
+  void Close(){
+    db.closeConnection();
+    bluetooth.closeConnection();
   }
 }

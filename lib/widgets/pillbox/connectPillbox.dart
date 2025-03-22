@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pillstationmovil/config/Bluetooth.dart';
+import 'package:pillstationmovil/config/mongodb.dart';
 import 'package:pillstationmovil/config/pill.dart';
+import 'package:pillstationmovil/config/user.dart';
 import 'package:pillstationmovil/widgets/pillbox/organize_pills.dart';
 
+DateTime date = DateTime.now();
+List<int> hours = [];
+List<int> latehours = [];
+List<int> minutes = [];
 class Connectpillbox extends StatefulWidget {
   const Connectpillbox({super.key});
 
@@ -11,11 +17,13 @@ class Connectpillbox extends StatefulWidget {
   State<Connectpillbox> createState() => _ConnectpillboxState();
 }
 
-class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProviderStateMixin {
+class _ConnectpillboxState extends State<Connectpillbox>
+    with SingleTickerProviderStateMixin {
   String? datos;
   bool _isConnecting = true;
   late AnimationController _animationController;
 
+  @override
   @override
   void initState() {
     super.initState();
@@ -24,20 +32,13 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
       duration: const Duration(seconds: 2),
     )..repeat();
 
-    DateTime date = DateTime.now();
-    List<int> hours=[];
-    List<int> latehours=[];
-    List<int> minutes=[];
-    bluetooth.size= 0;
-    //HORAS 2 4 Y 6 BIEN
-    // 4 Y 6 BIEN
-    //6 y 8 BIEN
-    //2, 4, 6 y 8 BIEN
-    bool pillH2=false;
-    bool pillH4=false;
-    bool pillH6=false;
-    bool pillH8=false;
-    for (Pill pill in pillList){
+    bluetooth.size = 0;
+    
+    bool pillH2 = false;
+    bool pillH4 = false;
+    bool pillH6 = false;
+    bool pillH8 = false;
+    for (Pill pill in pillList) {
       if (pill.hour == 2) {
         pillH2 = true;
       }
@@ -52,51 +53,45 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
       }
     }
     if (pillH2) {
-      bluetooth.size=4;
-    } else if(pillH4 && pillH6){
-      bluetooth.size=3;
-    } else if((pillH8 || pillH6) && !(pillH8 && pillH6)){
-      bluetooth.size=1;
+      bluetooth.size = 4;
+    } else if (pillH4 && pillH6) {
+      bluetooth.size = 3;
+    } else if ((pillH8 || pillH6) && !(pillH8 && pillH6)) {
+      bluetooth.size = 1;
     } else {
-      bluetooth.size=2;
+      bluetooth.size = 2;
     }
-    // for(Pill r in pillList){
-    //   for(int i=1; i<=bluetooth.size; i++) {
-    //     if (date.hour + r.hour >=24) {
-    //       latehours.add(((date.hour) + r.hour)%24);
-    //     } else {
-    //       hours.add((date.hour) + r.hour);
-    //     }
-    //   }
-    // }
-    for(Pill pill in pillList) {
-      for (int i = 1; i <= (8/pill.hour); i++) {
-        if (date.hour + pill.hour*i >= 24) {
-          latehours.add(((date.hour) + pill.hour*i)%24);
+    for (Pill pill in pillList) {
+      for (int i = 1; i <= (8 / pill.hour); i++) {
+        if (date.hour + pill.hour * i >= 24) {
+          latehours.add(((date.hour) + pill.hour * i) % 24);
         } else {
-          hours.add((date.hour) + pill.hour*i);
+          hours.add((date.hour) + pill.hour * i);
         }
       }
     }
-    for(int i=0; i<bluetooth.size; i++){
+    for (int i = 0; i < bluetooth.size; i++) {
       minutes.add(date.minute);
     }
-    hours=hours.toSet().toList();
+    hours = hours.toSet().toList();
     hours.sort();
-    latehours=latehours.toSet().toList();
+    latehours = latehours.toSet().toList();
     latehours.sort();
     hours.addAll(latehours);
+    // Modified connection approach
+    _connectToDevice();
+  }
 
-    print(hours);
-    print("${bluetooth.size}");
-    datos = "{hour : ${hours.toString()}, minutes:${minutes.toString()}}";
-    print("${datos}");
+  Future<void> _connectToDevice() async {
+    bool connectionSuccess = await SendData();
 
-    SendData();
-
-    Future.delayed(const Duration(seconds: 3), () {
-      checkConnectionStatus();
-    });
+    // Only check connection status if we're still mounted and the automatic
+    // state change in SendData() didn't happen (which would mean we crashed)
+    if (mounted && _isConnecting) {
+      setState(() {
+        _isConnecting = false;
+      });
+    }
   }
 
   void checkConnectionStatus() {
@@ -130,7 +125,8 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
               'assets/logo.png',
               height: 40,
               width: 40,
-              errorBuilder: (context, error, stackTrace) => const Icon(Icons.medication, size: 30, color: Colors.blue),
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.medication, size: 30, color: Colors.blue),
             ),
             const SizedBox(width: 8),
             const Text(
@@ -152,7 +148,8 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('Ayuda de Conexión'),
-                  content: const Text('Asegúrese que su dispositivo PillStation esté encendido y en modo de emparejamiento. El LED azul debe estar parpadeando.'),
+                  content: const Text(
+                      'Asegúrese que su dispositivo PillStation esté encendido y en modo de emparejamiento. El LED azul debe estar parpadeando.'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -199,8 +196,8 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                             _isConnecting
                                 ? "Conectando al dispositivo"
                                 : isConnected
-                                ? "Conexión exitosa"
-                                : "Error de conexión",
+                                    ? "Conexión exitosa"
+                                    : "Error de conexión",
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -212,8 +209,8 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                           _isConnecting
                               ? _buildConnectingIndicator()
                               : isConnected
-                              ? _buildSuccessIndicator()
-                              : _buildErrorIndicator(),
+                                  ? _buildSuccessIndicator()
+                                  : _buildErrorIndicator(),
                         ],
                       ),
                     ),
@@ -263,7 +260,6 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                     ),
 
                     const SizedBox(height: 32),
-
                   ],
                 ),
               ),
@@ -286,25 +282,32 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: isConnected ? null : () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: isConnected
+                          ? null
+                          : () {
+                              Navigator.pop(context);
+                            },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         side: BorderSide(
-                          color: isConnected ? Colors.grey.shade400 : Colors.blue.shade700,
+                          color: isConnected
+                              ? Colors.grey.shade400
+                              : Colors.blue.shade700,
                         ),
-                        backgroundColor: isConnected ? Colors.grey.shade200 : Colors.white,
+                        backgroundColor:
+                            isConnected ? Colors.grey.shade200 : Colors.white,
                       ),
                       child: Text(
                         "Volver",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: isConnected ? Colors.grey.shade600 : Colors.blue.shade700,
+                          color: isConnected
+                              ? Colors.grey.shade600
+                              : Colors.blue.shade700,
                         ),
                       ),
                     ),
@@ -312,21 +315,30 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                   const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _isConnecting ? null : () {
+                      onPressed: _isConnecting
+                          ? null
+                          : () async {
                         if (!isConnected) {
                           setState(() {
                             _isConnecting = true;
                           });
 
-                          // Try to connect again
-                          SendData();
+                          // Try to connect again with proper async handling
+                          bool success = await SendData();
 
-                          // Check connection status after a delay
-                          Future.delayed(const Duration(seconds: 3), () {
-                            checkConnectionStatus();
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _isConnecting = false;
+                              // bluetooth.isConnected will be updated by SendData()
+                            });
+                          }
                         } else {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrganizePills()));
+                          print("conseguiendo IDS");
+                          db.getMedsId(pillList);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OrganizePills()));
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -346,7 +358,7 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
                         ),
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -430,7 +442,6 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
         const Text(
           "No se pudo conectar",
           style: TextStyle(
-
             fontSize: 16,
             color: Colors.white,
           ),
@@ -484,29 +495,26 @@ class _ConnectpillboxState extends State<Connectpillbox> with SingleTickerProvid
     );
   }
 
-  Future<void> SendData() async {
+  Future<bool> SendData() async {
     try {
-      await bluetooth.sendData(datos!);
+      // First get medication IDs
+      await db.getMedsId(pillList);
+      print(db.meds);
 
-      // Explicitly set bluetooth.isConnected to true if needed
-      // This depends on how your bluetooth class is implemented
-      // If bluetooth.sendData() already sets isConnected, you can skip this
+      print(hours);
+      print("${bluetooth.size}");
 
-      // Update the UI state after data is sent
-      if (mounted) {
-        setState(() {
-          _isConnecting = false;
-        });
-      }
+      datos = "{hour : ${hours.toString()}, minutes:${minutes
+          .toString()} medicamentos:${db.meds} NurseId:${nurse.ID}";
+      print("${datos}");
+
+      // This will now properly wait for the connection and data sending to complete
+      bool success = await bluetooth.sendData(datos!);
+      return success;
     } catch (e) {
       print("Error sending data: $e");
-
-      // Update UI to show error state
-      if (mounted) {
-        setState(() {
-          _isConnecting = false;
-        });
-      }
+      return false;
     }
   }
+
 }
