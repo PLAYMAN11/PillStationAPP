@@ -75,9 +75,9 @@ class Mongodb {
         resultados.add(result[0]["_id"]);
       }
     }
-    for(int i =0; i<meds.length; i++){
+    for(int i =0; i<resultados.length; i++){
       ObjectId tmp=resultados[i];
-      meds.add(tmp.id.value);
+      meds.add(tmp.id.readCString());
     }
     print("MOSTRNADO TODOS LOS RESULTADOS");
     print(meds);
