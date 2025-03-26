@@ -8,7 +8,7 @@ Mongodb db = Mongodb();
 
 class Mongodb {
   bool isloaded = false;
-  List<ObjectId> meds = [];
+  List<String> meds = [];
   List<String> results = [];
 
   late Db db;
@@ -75,7 +75,10 @@ class Mongodb {
         resultados.add(result[0]["_id"]);
       }
     }
-    meds = resultados;
+    for(int i =0; i<meds.length; i++){
+      ObjectId? tmp;
+      meds.add(tmp!.id.value);
+    }
     print("MOSTRNADO TODOS LOS RESULTADOS");
     print(meds);
   }
