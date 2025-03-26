@@ -149,7 +149,7 @@ class _ConnectpillboxState extends State<Connectpillbox>
                 builder: (context) => AlertDialog(
                   title: const Text('Ayuda de Conexión'),
                   content: const Text(
-                      'Asegúrese que su dispositivo PillStation esté encendido y en modo de emparejamiento. El LED azul debe estar parpadeando.'),
+                      'Asegúrese que su dispositivo PillStation esté encendido.'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -322,23 +322,21 @@ class _ConnectpillboxState extends State<Connectpillbox>
                           setState(() {
                             _isConnecting = true;
                           });
-
-                          // Try to connect again with proper async handling
+                          bluetooth.resetConnectionState();
                           bool success = await SendData();
 
                           if (mounted) {
                             setState(() {
                               _isConnecting = false;
-                              // bluetooth.isConnected will be updated by SendData()
+                             
                             });
                           }
                         } else {
+                          bluetooth.resetConnectionState();
+                          await SendData();
                           print("conseguiendo IDS");
                           db.getMedsId(pillList);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OrganizePills()));
+                            
                         }
                       },
                       style: ElevatedButton.styleFrom(

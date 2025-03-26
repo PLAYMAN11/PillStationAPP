@@ -343,7 +343,6 @@ class _OrganizePillsState extends State<OrganizePills> {
     );
   }
   void Close(){
-    db.closeConnection();
     bluetooth.closeConnection();
   }
 }
