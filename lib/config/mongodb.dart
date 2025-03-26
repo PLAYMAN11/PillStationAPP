@@ -77,7 +77,7 @@ class Mongodb {
     }
     for(int i =0; i<resultados.length; i++){
       ObjectId tmp=resultados[i];
-      meds.add(tmp.id.readCString());
+      meds.add(tmp.id.hexString);
     }
     print("MOSTRNADO TODOS LOS RESULTADOS");
     print(meds);
