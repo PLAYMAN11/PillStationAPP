@@ -58,7 +58,7 @@ class Mongodb {
       return false;
     }
     print("Si existe");
-    nurse = user(result[0]["_id"], result[0]["name"]);
+    nurse = user(result[0]["_id"], result[0]["nFix data structureame"]);
     return true;
   }
 
@@ -76,8 +76,8 @@ class Mongodb {
       }
     }
     for(int i =0; i<meds.length; i++){
-      ObjectId? tmp;
-      meds.add(tmp!.id.value);
+      ObjectId tmp=resultados[i];
+      meds.add(tmp.id.value);
     }
     print("MOSTRNADO TODOS LOS RESULTADOS");
     print(meds);
