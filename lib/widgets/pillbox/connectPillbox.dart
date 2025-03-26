@@ -503,7 +503,7 @@ class _ConnectpillboxState extends State<Connectpillbox>
       print("${bluetooth.size}");
 
       datos = "{hour : ${hours.toString()}, minutes:${minutes
-          .toString()} medicamentos:${db.meds} NurseId:${nurse.ID}";
+          .toString()}, medicamentos:${db.meds}, NurseId:${nurse.ID}";
       print("${datos}");
 
       // This will now properly wait for the connection and data sending to complete
