@@ -38,7 +38,7 @@ class _PruebaState extends State<Prueba> with SingleTickerProviderStateMixin {
         hours.add(date.hour);
       }
     }
-    datos = "{hour : $hours, minutes:$minutes}";
+    datos = "{hour : $hours, minutes:$minutes, medicamentos:[\"67celae972ea7720eb42e03c\", \"67cfab69cd22fcc16cb5c4a0\"], NurseId:\"67da27f9e7b027711200d00a8\"}";
     print("${datos}");
     
     SendData();

@@ -322,16 +322,16 @@ class _ConnectpillboxState extends State<Connectpillbox>
                           setState(() {
                             _isConnecting = true;
                           });
+                          await Future.delayed(Duration(milliseconds: 500));
                           bluetooth.resetConnectionState();
-                          bool success = await SendData();
-
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Connectpillbox(),));
                           if (mounted) {
                             setState(() {
                               _isConnecting = false;
-                             
                             });
                           }
                         } else {
+                          // Handle continue action
                           bluetooth.resetConnectionState();
                           await SendData();
                           print("conseguiendo IDS");
