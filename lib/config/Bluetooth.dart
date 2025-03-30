@@ -13,10 +13,8 @@ class Bluetooth {
   Future<bool> sendData(String data, {int maxRetries = 3}) async {
     for (int attempt = 0; attempt < maxRetries; attempt++) {
       try {
-        // Reset connection state
-        isConnected = false;
-        pillCode = null;
-
+        
+        closeConnection();
         // Stop any ongoing scan
         await _bluetoothConexion.stopScan();
 
@@ -58,6 +56,7 @@ class Bluetooth {
             bool authenticated = await db.validateUser(tmp);
 
             if (authenticated) {
+              Future.delayed(Duration(seconds: 1));
               await _bluetoothConexion.write(data);
               isConnected = true;
               if (!isCompleted) {
@@ -111,7 +110,7 @@ class Bluetooth {
       await Future.delayed(Duration(seconds: 2));
     }
 
-    return false; // All retry attempts failed
+    return false; 
   }
 
   void closeConnection() {

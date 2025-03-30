@@ -431,29 +431,16 @@ class _PruebaState extends State<Prueba> with SingleTickerProviderStateMixin {
     );
   }
 
-  Future<void> SendData() async {
+  Future<bool> SendData() async {
+    bool succes =false;
     try {
-      await bluetooth.sendData(datos!);
-
-      // Explicitly set bluetooth.isConnected to true if needed
-      // This depends on how your bluetooth class is implemented
-      // If bluetooth.sendData() already sets isConnected, you can skip this
-
-      // Update the UI state after data is sent
-      if (mounted) {
-        setState(() {
-          _isConnecting = false;
-        });
-      }
+     succes = await bluetooth.sendData(datos!);
     } catch (e) {
       print("Error sending data: $e");
 
-      // Update UI to show error state
-      if (mounted) {
-        setState(() {
-          _isConnecting = false;
-        });
-      }
+      
     }
+      return succes;
+    
   }
 }
